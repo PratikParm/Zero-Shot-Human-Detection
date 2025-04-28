@@ -1,0 +1,11 @@
+git+https://github.com/openai/CLIP.git
+pycocotools
+torch
+torchvision
+tqdm
+scikit-learn
+seaborn
+pandas
+matplotlib
+pillow
+requests

@@ -5,8 +5,11 @@ from torchvision import transforms
 from PIL import Image
 import clip
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from src.classifiers import CLIPB32Classifier
 import numpy as np
+from transformers import CLIPProcessor, CLIPModel
+from tqdm import tqdm
 
 # Device
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -73,15 +76,6 @@ def plot_predictions(images, predictions, grid_size=(4, 4), patch_size=256, wind
     plt.tight_layout()
     plt.show()
 
-
-
-import torch
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from torchvision import transforms
-from transformers import CLIPProcessor, CLIPModel
-from tqdm import tqdm
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

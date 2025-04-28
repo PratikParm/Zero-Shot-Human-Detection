@@ -111,7 +111,7 @@ def balance_dataset(data_dir):
     balanced_df = balanced_df.sample(frac=1).reset_index(drop=True)
     balanced_df.to_csv(data_dir + "/dataset.csv", index=False)
 
-    print("\n✅ Saved dataset!")
+    print("\nSaved dataset!")
     print(balanced_df['label'].value_counts())
 
 
@@ -119,39 +119,39 @@ def main():
     # Define root and dataset directories
     root_dir = os.path.abspath(os.path.dirname(__file__))  # script directory
     datasets_dir = os.path.join(root_dir, "datasets")
-    data_dir = os.path.join(datasets_dir, "coco_dataset")
+    data_dir = os.path.join(datasets_dir, "dataset")
     
-    # # Create necessary directories
-    # os.makedirs(data_dir, exist_ok=True)
-    
-    # # URLs for COCO dataset
-    # coco_val_images_url = "http://images.cocodataset.org/zips/val2017.zip"
-    # coco_annotations_url = "http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
+    # Create necessary directories
+    os.makedirs(data_dir, exist_ok=True)
 
-    # # Paths for zip files
-    # val_zip_path = os.path.join(data_dir, "coco_val2017.zip")
-    # ann_zip_path = os.path.join(data_dir, "coco_annotations.zip")
+    # URLs for COCO dataset
+    val_images_url = "http://images.cocodataset.org/zips/val2017.zip"
+    annotations_url = "http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
 
-    # print("Downloading COCO val2017 images...")
-    # download_file(coco_val_images_url, val_zip_path)
+    # Paths for zip files
+    val_zip_path = os.path.join(data_dir, "val2017.zip")
+    ann_zip_path = os.path.join(data_dir, "annotations.zip")
 
-    # print("\nDownloading COCO annotations...")
-    # download_file(coco_annotations_url, ann_zip_path)
+    print("Downloading COCO val2017 images...")
+    download_file(val_images_url, val_zip_path)
 
-    # print("\nExtracting COCO val2017 images...")
-    # unzip_file(val_zip_path, data_dir)
+    print("\nDownloading COCO annotations...")
+    download_file(annotations_url, ann_zip_path)
 
-    # print("\nExtracting COCO annotations...")
-    # unzip_file(ann_zip_path, data_dir)
+    print("\nExtracting COCO val2017 images...")
+    unzip_file(val_zip_path, data_dir)
 
-    # # Remove zip files after extraction
-    # os.remove(val_zip_path)
-    # os.remove(ann_zip_path)
+    print("\nExtracting COCO annotations...")
+    unzip_file(ann_zip_path, data_dir)
 
-    # # Verify directory structure
-    # print("\nDownload and extraction complete!")
-    # print("Files inside datasets/coco_dataset/:")
-    balance_dataset(datasets_dir + "/coco_dataset")
+    # Remove zip files after extraction
+    os.remove(val_zip_path)
+    os.remove(ann_zip_path)
+
+    # Verify directory structure
+    print("\nDownload and extraction complete!")
+    print("Files inside datasets/dataset/:")
+    balance_dataset(data_dir)
 
 if __name__ == "__main__":
     main()

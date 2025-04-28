@@ -143,7 +143,7 @@ def evaluate(model, X_test, y_test, idx2label=None):
 # Main script
 if __name__ == "__main__":
     # Load dataset
-    df = pd.read_csv("balanced_coco_dataset.csv")
+    df = pd.read_csv("balanced_dataset.csv")
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)  # Shuffle
 
     # In-memory split

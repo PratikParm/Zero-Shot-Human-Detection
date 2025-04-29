@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+from sklearn.utils import resample
 from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd
 import clip
@@ -143,7 +144,7 @@ def evaluate(model, X_test, y_test, idx2label=None):
 # Main script
 if __name__ == "__main__":
     # Load dataset
-    df = pd.read_csv("balanced_dataset.csv")
+    df = pd.read_csv("dataset.csv")
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)  # Shuffle
 
     # In-memory split
@@ -154,6 +155,24 @@ if __name__ == "__main__":
     df_val = df.iloc[train_end:val_end]
     df_test = df.iloc[val_end:]
     df_test.to_csv("test/test.csv", index=False)
+
+    # Balance classes in train data
+    # Separate majority and minority classes
+    majority_class = df_train['label'].value_counts().idxmax()
+    majority_size = df_train['label'].value_counts().max()
+
+    # Resample each class to match majority size
+    balanced_df = pd.DataFrame()
+    for label in df_train['label'].unique():
+        class_subset = df_train[df_train['label'] == label]
+        resampled = resample(class_subset,
+                            replace=True,  # sample with replacement
+                            n_samples=majority_size,
+                            random_state=42)
+        balanced_df = pd.concat([balanced_df, resampled])
+
+    # Shuffle and save the balanced dataset
+    df_train = balanced_df.sample(frac=1).reset_index(drop=True)
 
     # Transforms
     train_transform = transforms.Compose([

@@ -30,7 +30,7 @@ def unzip_file(zip_path, extract_to):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
 
-def balance_dataset(data_dir):
+def create_dataset(data_dir):
 
     ann_file = os.path.join(data_dir, 'annotations', 'instances_val2017.json')
     images_dir = os.path.join(data_dir, 'val2017')
@@ -92,27 +92,10 @@ def balance_dataset(data_dir):
 
     # Save as CSV
     df = pd.DataFrame(dataset_entries)
-
-    # Separate majority and minority classes
-    majority_class = df['label'].value_counts().idxmax()
-    majority_size = df['label'].value_counts().max()
-
-    # Resample each class to match majority size
-    balanced_df = pd.DataFrame()
-    for label in df['label'].unique():
-        class_subset = df[df['label'] == label]
-        resampled = resample(class_subset,
-                            replace=True,  # sample with replacement
-                            n_samples=majority_size,
-                            random_state=42)
-        balanced_df = pd.concat([balanced_df, resampled])
-
-    # Shuffle and save the balanced dataset
-    balanced_df = balanced_df.sample(frac=1).reset_index(drop=True)
-    balanced_df.to_csv(data_dir + "/dataset.csv", index=False)
+    df.to_csv(data_dir + "/dataset.csv", index=False)
 
     print("\nSaved dataset!")
-    print(balanced_df['label'].value_counts())
+    print(df['label'].value_counts())
 
 
 def main():
@@ -151,7 +134,6 @@ def main():
     # Verify directory structure
     print("\nDownload and extraction complete!")
     print("Files inside datasets/dataset/:")
-    balance_dataset(data_dir)
 
 if __name__ == "__main__":
     main()
